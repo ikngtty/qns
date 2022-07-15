@@ -1,9 +1,12 @@
 package qns
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
+	"path"
 
 	"github.com/PuerkitoBio/goquery"
 )
@@ -14,6 +17,18 @@ type notification struct {
 }
 
 func Load() {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	err = os.MkdirAll(path.Join(home, ".qns"), 0777)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
 	req, err := http.NewRequest("GET", "https://qiita.com/notifications", nil)
 	if err != nil {
 		fmt.Println(err)
@@ -61,8 +76,16 @@ func Load() {
 		notifications = append(notifications, notification{kind, wrapper.Text()})
 	})
 
-	for _, notifi := range notifications {
-		fmt.Printf("kind:%s text:%s\n", notifi.Kind, notifi.Text)
+	notificationsJson, err := json.Marshal(notifications)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	err = ioutil.WriteFile(path.Join(home, ".qns/notifications.json"), notificationsJson, 0664)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
 }
 
