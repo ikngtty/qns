@@ -9,18 +9,18 @@ import (
 )
 
 func main() {
-	var loadSettings qns.LoadSettings
-	loadFlag := flag.NewFlagSet("load", flag.ExitOnError)
-	loadFlag.IntVar(&loadSettings.Pages, "pages", 50, "the number of pages to load")
-
 	if len(os.Args) < 2 {
 		fmt.Println("expected a subcommand")
 		os.Exit(1)
 	}
 	switch os.Args[1] {
 	case "load":
-		loadFlag.Parse(os.Args[2:])
-		qns.Load(loadSettings)
+		var settings qns.LoadSettings
+		flagSet := flag.NewFlagSet("load", flag.ExitOnError)
+		flagSet.IntVar(&settings.Pages, "pages", 50, "the number of pages to load")
+		flagSet.Parse(os.Args[2:])
+
+		qns.Load(settings)
 	case "view":
 		if len(os.Args) < 3 {
 			fmt.Println("expected a kind of notifications")
