@@ -62,7 +62,11 @@ func Load(settings LoadSettings) {
 
 			contents := selectionToSlice(wrapper.Contents())
 			var kind string
-			if len(contents) == 7 && contents[4].HasClass("bold") && contents[4].Text() == "LGTM" {
+			if len(contents) == 5 && contents[2].HasClass("bold") && contents[2].Text() == "フォロー" {
+				kind = "フォロー"
+			} else if len(contents) == 5 && contents[2].HasClass("bold") && contents[2].Text() == "採用" {
+				kind = "採用"
+			} else if len(contents) == 7 && contents[4].HasClass("bold") && contents[4].Text() == "LGTM" {
 				kind = "LGTM"
 			} else if len(contents) == 7 && contents[4].HasClass("bold") && contents[4].Text() == "ストック" {
 				kind = "ストック"
