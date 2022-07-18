@@ -18,13 +18,7 @@ type notification struct {
 }
 
 func Load() {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-
-	err = os.MkdirAll(path.Join(home, ".qns"), 0777)
+	err := os.MkdirAll(getQnsDirPath(), 0777)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -97,11 +91,25 @@ func Load() {
 		os.Exit(1)
 	}
 
-	err = ioutil.WriteFile(path.Join(home, ".qns/notifications.json"), notificationsJson, 0664)
+	err = ioutil.WriteFile(getNotificationsPath(), notificationsJson, 0664)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+}
+
+func getQnsDirPath() string {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	return path.Join(home, ".qns")
+}
+
+func getNotificationsPath() string {
+	return path.Join(getQnsDirPath(), "notifications.json")
 }
 
 func selectionToSlice(sel *goquery.Selection) []*goquery.Selection {
