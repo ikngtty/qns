@@ -89,6 +89,8 @@ func Load() {
 		time.Sleep(time.Second)
 	}
 
+	fmt.Printf("loaded %d notifications!\n", len(notifications))
+
 	notificationsJson, err := json.Marshal(notifications)
 	if err != nil {
 		fmt.Println(err)
