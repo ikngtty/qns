@@ -98,6 +98,28 @@ func Load() {
 	}
 }
 
+func View(kind string) {
+	notificationsJson, err := ioutil.ReadFile(getNotificationsPath())
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	var notifications []notification
+	err = json.Unmarshal(notificationsJson, &notifications)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	for _, notifi := range notifications {
+		if notifi.Kind != kind {
+			continue
+		}
+		fmt.Println(notifi.Text)
+	}
+}
+
 func getQnsDirPath() string {
 	home, err := os.UserHomeDir()
 	if err != nil {

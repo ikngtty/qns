@@ -15,6 +15,12 @@ func main() {
 	switch os.Args[1] {
 	case "load":
 		qns.Load()
+	case "view":
+		if len(os.Args) < 3 {
+			fmt.Println("expected a kind of notifications")
+			os.Exit(1)
+		}
+		qns.View(os.Args[2])
 	default:
 		fmt.Println("subcommand invalid")
 		os.Exit(1)
