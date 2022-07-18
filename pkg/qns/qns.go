@@ -17,7 +17,11 @@ type notification struct {
 	Text string
 }
 
-func Load() {
+type LoadSettings struct {
+	Pages int
+}
+
+func Load(settings LoadSettings) {
 	err := os.MkdirAll(getQnsDirPath(), 0777)
 	if err != nil {
 		fmt.Println(err)
@@ -25,7 +29,7 @@ func Load() {
 	}
 
 	notifications := make([]notification, 0)
-	for page := 1; page <= 50; page++ {
+	for page := 1; page <= settings.Pages; page++ {
 		url := fmt.Sprintf("https://qiita.com/notifications?page=%d", page)
 		req, err := http.NewRequest("GET", url, nil)
 		if err != nil {
