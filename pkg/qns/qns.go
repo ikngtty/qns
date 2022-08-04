@@ -3,7 +3,6 @@ package qns
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"path"
@@ -99,7 +98,7 @@ func Load(settings LoadSettings) {
 		os.Exit(1)
 	}
 
-	err = ioutil.WriteFile(getNotificationsPath(), notificationsJson, 0664)
+	err = os.WriteFile(getNotificationsPath(), notificationsJson, 0664)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -107,7 +106,7 @@ func Load(settings LoadSettings) {
 }
 
 func View(kind string) {
-	notificationsJson, err := ioutil.ReadFile(getNotificationsPath())
+	notificationsJson, err := os.ReadFile(getNotificationsPath())
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
